@@ -1,0 +1,7 @@
+[MESSAGES CONTROL]
+disable=invalid-name,
+	too-many-instance-attributes,
+	too-many-arguments,
+	too-many-branches,
+	duplicate-code,
+	format
