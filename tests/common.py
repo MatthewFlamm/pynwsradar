@@ -49,65 +49,31 @@ def station_callback(request):
     raise ConnectionError(f"Could not match params {request.params}")
 
 
-@pytest.fixture
-def responses_nwsradar():
-    """Setup responses for nwsradar."""
-    with responses.RequestsMock() as rsps:
-        with open(
-            os.path.join(os.path.dirname(__file__), "data", "station.xml")
-        ) as fid:
-            body = fid.read()
-
-        rsps.add_callback(
-            responses.GET,
-            STATION_URL,
-            callback=station_callback,
-        )
-
-        rsps.add(
-            responses.GET,
-            USGS_NATIONALMAP_URL,
-            body=fake_image_bytes().getvalue(),
-            status=200,
-        )
-
-        rsps.add(
-            responses.GET,
-            LEGEND_BREF_URL,
-            body=fake_image_bytes(size=(300, 50)).getvalue(),
-            status=200,
-        )
-
-        yield rsps
+def station_response(rsps, file="station.xml"):
+    rsps.add_callback(
+        responses.GET,
+        STATION_URL,
+        callback=station_callback,
+    )
+    return rsps
 
 
-@pytest.fixture
-def responses_nwsradar_bdsa():
-    """Setup responses for nwsradar."""
-    with responses.RequestsMock() as rsps:
-        with open(
-            os.path.join(os.path.dirname(__file__), "data", "station.xml")
-        ) as fid:
-            body = fid.read()
+def basemap_response(rsps):
+    rsps.add(
+        responses.GET,
+        USGS_NATIONALMAP_URL,
+        body=fake_image_bytes().getvalue(),
+        status=200,
+    )
+    return rsps
 
-        rsps.add_callback(
-            responses.GET,
-            STATION_URL,
-            callback=station_callback,
-        )
 
-        rsps.add(
-            responses.GET,
-            USGS_NATIONALMAP_URL,
-            body=fake_image_bytes().getvalue(),
-            status=200,
-        )
+def legend_response(rsps, legend_url=LEGEND_BREF_URL):
+    rsps.add(
+        responses.GET,
+        legend_url,
+        body=fake_image_bytes(size=(300, 50)).getvalue(),
+        status=200,
+    )
 
-        rsps.add(
-            responses.GET,
-            LEGEND_BDSA_URL,
-            body=fake_image_bytes(size=(300, 50)).getvalue(),
-            status=200,
-        )
-
-        yield rsps
+    return rsps
