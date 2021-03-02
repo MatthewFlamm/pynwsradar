@@ -1,4 +1,7 @@
 """Test NEXRAD."""
+from xml.etree import ElementTree
+
+import pytest
 import responses
 
 from pynwsradar import Nexrad
@@ -32,3 +35,12 @@ def test_nexrad():
         assert station.url == STATION_URL
         assert station.station == STATION
         station.layers["klwx_bref_raw"].update_image()
+
+
+def test_nexrad_failed_xmlparse():
+    with responses.RequestsMock() as rsps:
+        rsps = station_response(rsps, file="station_error.html")
+
+        station = Nexrad(STATION)
+        with pytest.raises(ElementTree.ParseError):
+            station.update()

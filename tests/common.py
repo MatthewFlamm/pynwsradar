@@ -26,34 +26,37 @@ def match_params(params, desired_params):
     return True
 
 
-def station_callback(request):
-    # GetCapabilities
-    if match_params(request.params, CAPABILITIES_PARAMS):
-        with open(
-            os.path.join(os.path.dirname(__file__), "data", "station.xml")
-        ) as fid:
-            data = fid.read()
-        return (200, {}, data)
+def get_station_callback(capabilities_file="station.xml"):
+    def station_callback(request):
+        # GetCapabilities
+        if match_params(request.params, CAPABILITIES_PARAMS):
+            with open(
+                os.path.join(os.path.dirname(__file__), "data", capabilities_file)
+            ) as fid:
+                data = fid.read()
+            return (200, {}, data)
 
-    # bref_raw layer
-    elif match_params(request.params, BREF_PARAMS) or match_params(
-        request.params, BDSA_PARAMS
-    ):
-        size = (int(request.params["width"]), int(request.params["height"]))
-        return (
-            200,
-            {},
-            fake_image_bytes(size=size).getvalue(),
-        )
+        # bref_raw layer
+        elif match_params(request.params, BREF_PARAMS) or match_params(
+            request.params, BDSA_PARAMS
+        ):
+            size = (int(request.params["width"]), int(request.params["height"]))
+            return (
+                200,
+                {},
+                fake_image_bytes(size=size).getvalue(),
+            )
 
-    raise ConnectionError(f"Could not match params {request.params}")
+        raise ConnectionError(f"Could not match params {request.params}")
+
+    return station_callback
 
 
 def station_response(rsps, file="station.xml"):
     rsps.add_callback(
         responses.GET,
         STATION_URL,
-        callback=station_callback,
+        callback=get_station_callback(file),
     )
     return rsps
 
