@@ -1,4 +1,5 @@
 """NEXRAD radar."""
+import logging
 from io import BytesIO
 from typing import IO, Dict, List, Optional, Tuple
 from xml.etree import ElementTree
@@ -8,6 +9,8 @@ import requests
 from PIL import Image
 
 from .const import NAMESPACE_WMS, NAMESPACE_XLINK, USGS_NATIONALMAP_URL
+
+_LOGGER = logging.getLogger(__name__)
 
 # pylint: disable=C0301
 # from https://stackoverflow.com/questions/765736/how-to--use-pil-to-make-all-white-pixels-transparent
@@ -323,8 +326,7 @@ class Nexrad:
         try:
             self._data = ElementTree.fromstring(raw_data)
         except ElementTree.ParseError as err:
-            print(self.url)
-            print(raw_data)
+            _LOGGER.error("url: %s\nraw_data: %s", self.url, raw_data)
             raise err
         layers = self._data.findall(
             f".//{NAMESPACE_WMS}Capability/{NAMESPACE_WMS}Layer/{NAMESPACE_WMS}Layer"
