@@ -298,7 +298,7 @@
         </EX_GeographicBoundingBox>
         <BoundingBox CRS="CRS:84" minx="-82.487" miny="33.976" maxx="-72.487" maxy="43.976"/>
         <BoundingBox CRS="EPSG:4326" minx="33.976" miny="-82.487" maxx="43.976" maxy="-72.487"/>
-        <Dimension name="time" default="2021-02-21T12:21:11Z" units="ISO8601">2021-02-21T12:07:17.000Z,2021-02-21T12:14:16.000Z,2021-02-21T12:21:11.000Z</Dimension>
+        <Dimension name="time" default="2021-02-21T12:31:11Z" units="ISO8601">2021-02-21T12:07:17.000Z,2021-02-21T12:14:16.000Z,2021-02-21T12:21:11.000Z,2021-02-21T12:31:11.000Z</Dimension>
         <DataURL>
           <Format>text/plain</Format>
           <OnlineResource xlink:type="simple" xlink:href="https://mrms.ncep.noaa.gov/data/RIDGEII/L2/KLWX/BREF_RAW"/>

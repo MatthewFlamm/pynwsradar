@@ -163,8 +163,6 @@ class Layer:
     @property
     def name(self) -> str:
         """Name of layer."""
-        if self._name is None:
-            raise ValueError("Name must be available.")
         return self._name
 
     @property
@@ -271,7 +269,7 @@ class Layer:
         """Return BytesIO object if no filename, or save to file."""
         bytes_obj = BytesIO()
         self._gen_frames()
-        frames = List(self._frames.values())
+        frames = list(self._frames.values())
         if frames:
             frames[0].save(
                 bytes_obj,
