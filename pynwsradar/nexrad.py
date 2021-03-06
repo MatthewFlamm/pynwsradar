@@ -109,7 +109,10 @@ class Layer:
         name_element = layer.find(f"{NAMESPACE_WMS}Name")
         if name_element is None or not hasattr(name_element, "text"):
             raise ValueError("Name must be present.")
-        self._name = name_element.text
+
+        name = name_element.text
+        assert name
+        self._name = name
 
     def _set_abstract(self, layer: ElementTree.Element):
         """Validate and set abstract."""
