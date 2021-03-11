@@ -1,5 +1,5 @@
 [tool.pytest.ini_options]
-addopts = "--cov=pynwsradar --cov-report term-missing"
+addopts = "--cov=pynwsradar --cov-report=term-missing"
 testpaths = [
 	  "tests"
 ]
