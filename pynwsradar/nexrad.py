@@ -109,7 +109,10 @@ class Layer:
         name_element = layer.find(f"{NAMESPACE_WMS}Name")
         if name_element is None or not hasattr(name_element, "text"):
             raise ValueError("Name must be present.")
-        self._name = name_element.text
+
+        name = name_element.text
+        assert name
+        self._name = name
 
     def _set_abstract(self, layer: ElementTree.Element):
         """Validate and set abstract."""
@@ -163,8 +166,6 @@ class Layer:
     @property
     def name(self) -> str:
         """Name of layer."""
-        if self._name is None:
-            raise ValueError("Name must be available.")
         return self._name
 
     @property
@@ -271,7 +272,7 @@ class Layer:
         """Return BytesIO object if no filename, or save to file."""
         bytes_obj = BytesIO()
         self._gen_frames()
-        frames = List(self._frames.values())
+        frames = list(self._frames.values())
         if frames:
             frames[0].save(
                 bytes_obj,
