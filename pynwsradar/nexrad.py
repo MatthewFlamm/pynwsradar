@@ -222,7 +222,7 @@ class Layer:
         elif not self._legend.width == size[0]:
             self.update_legend(size[0])
 
-        for key in self._images:
+        for key in self._images.copy():
             if key not in self.dimension.dimensions[-num:]:
                 self._images.pop(key)
 
@@ -253,7 +253,7 @@ class Layer:
 
     def _gen_frames(self) -> None:
         """Generate frames from images."""
-        for key in self._frames:
+        for key in self._frames.copy():
             if key not in self._images:
                 self._frames.pop(key)
         for key in self._images:
