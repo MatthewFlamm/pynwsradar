@@ -96,6 +96,25 @@ def test_nexrad_new_data():
     assert layer1.dimension.default == "2021-02-21T12:31:11Z"
 
 
+def test_nexrad_new_data_loop():
+    with responses.RequestsMock() as rsps:
+        rsps = station_response(rsps)
+        rsps = basemap_response(rsps)
+        rsps = legend_response(rsps)
+
+        station = Nexrad(STATION)
+        station.update()
+        layer1 = station.layers["klwx_bref_raw"]
+        layer1.update_image(num=2)
+
+    with responses.RequestsMock() as rsps:
+        rsps = station_response(rsps, file="station_extra_dimension.xml")
+
+        station.update()
+        layer1.update_image(num=2)
+    assert station.layers["klwx_bref_raw"] is layer1
+
+
 def test_nexrad_failed_xmlparse():
     with responses.RequestsMock() as rsps:
         rsps = station_response(rsps, file="station_error.html")
