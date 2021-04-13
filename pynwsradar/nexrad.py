@@ -313,8 +313,8 @@ class Nexrad:
         self._layer_dict: Optional[Dict[str, Layer]] = None
         self._data: Optional[ElementTree.Element] = None
 
-    def update(self) -> None:
-        """Update capabilities."""
+    def _get_data(self) -> bytes:
+        """Retrieve raw data."""
         response = requests.get(
             self.url,
             params={
@@ -323,7 +323,11 @@ class Nexrad:
                 "service": "wms",
             },
         )
-        raw_data = response.content
+        return response.content
+
+    def update(self) -> None:
+        """Update capabilities."""
+        raw_data = self._get_data()
         try:
             self._data = ElementTree.fromstring(raw_data)
         except ElementTree.ParseError as err:
