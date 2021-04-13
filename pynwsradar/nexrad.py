@@ -324,7 +324,7 @@ class Nexrad:
             },
         )
         return response.content
-        
+
     def update(self) -> None:
         """Update capabilities."""
         raw_data = self._get_data()
